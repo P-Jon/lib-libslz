@@ -33,27 +33,33 @@
 ################################################################################
 # Library registration
 ################################################################################
-#$(eval $(call addlib_s,libzlib,$(CONFIG_LIBZLIB)))
+$(eval $(call addlib_s,libzlib,$(CONFIG_LIBSLZ)))
 
 ################################################################################
 # Original sources
 ################################################################################
-#LIBSLZ_VERSION=1.2.0
+#### LIBSLZ_VERSION=1.2.0
 LIBSLZ_VERSION=ff537154e7f5f2fffdbef1cd8c52b564c1b00067
 LIBSLZ_URL=http://git.1wt.eu/web?p=libslz.git;a=snapshot;h=$(LIBSLZ_VERSION);sf=tgz
+LIBSLZ_DOWNLOADDIR=libslz-
 LIBSLZ_DIR=libslz
 
-#$(eval $(call fetch,libslz,$(LIBSLZ_URL),$(LIBSLZ_VERSION).tar.gz))
-# version with the dash
-$(eval $(call fetch,libslz,$(LIBSLZ_URL),-$(LIBSLZ_VERSION).tar.gz))
+#### Without Dash: 
+$(eval $(call fetch,libslz,$(LIBSLZ_URL),$(LIBSLZ_VERSION).tar.gz))
+
+# Version with the dash:
+#$(eval $(call fetch,libslz,$(LIBSLZ_DOWNLOADDIR),$(LIBSLZ_VERSION).tar.gz))
 
 ################################################################################
 # Helpers
 ################################################################################
+LIBSLZ_EXTRACTED=$(LISLZ_ORIGIN)/$(LIBZLIB_DIR)
 
 ################################################################################
 # Library includes
 ################################################################################
+CINCLUDES-$(CONFIG_LIBSLZ)   += -I$(LIBSLZ_EXTRACTED)
+CXXINCLUDES-$(CONFIG_LIBSLZ) += -I$(LIBSLZ_EXTRACTED)
 
 ################################################################################
 # Global flags
