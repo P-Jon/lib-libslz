@@ -44,11 +44,7 @@ LIBSLZ_URL=http://git.1wt.eu/web?p=libslz.git;a=snapshot;h=$(LIBSLZ_VERSION);sf=
 LIBSLZ_DOWNLOADDIR=libslz-
 LIBSLZ_DIR=libslz
 
-#### Without Dash: 
-$(eval $(call fetch,libslz,$(LIBSLZ_URL),$(LIBSLZ_VERSION).tar.gz))
-
-# Version with the dash:
-#$(eval $(call fetch,libslz,$(LIBSLZ_DOWNLOADDIR),$(LIBSLZ_VERSION).tar.gz))
+$(eval $(call fetchas,libslz,$(LIBSLZ_URL),$(LIBSLZ_VERSION).tar.gz))
 
 ################################################################################
 # Helpers
@@ -64,6 +60,16 @@ CXXINCLUDES-$(CONFIG_LIBSLZ) += -I$(LIBSLZ_EXTRACTED)
 ################################################################################
 # Global flags
 ################################################################################
+OPTIONS_CFLAGS  += $(if $(SLZ_INC),-I$(SLZ_INC))
+OPTIONS_LDFLAGS += $(if $(SLZ_LIB),-L$(SLZ_LIB)) -lslz
+
+LIBSLZ_FLAGS += -fomit-frame-pointer \
+                        -fPIC -DPRECOMPUTE_TABLES \ 
+                        -Wall \
+                        -g
+
+LIBSLZ_CFLAGS-y += $(LIBSLZ_FLAGS)
+LIBZLIB_CXXFLAGS-y += $(LIBSLZ_FLAGS)
 
 ################################################################################
 # libslz code
@@ -73,3 +79,13 @@ LIBSLZ_SRCS-y += $(LIBSLZ_EXTRACTED)/src/slz.h
 LIBSLZ_SRCS-y += $(LIBSLZ_EXTRACTED)/src/tables.h
 LIBSLZ_SRCS-y += $(LIBSLZ_EXTRACTED)/src/zdec.c
 LIBSLZ_SRCS-y += $(LIBSLZ_EXTRACTED)/src/zenc.c
+
+################################################################################
+# libslz prepare
+################################################################################
+# Run ./configure
+$(LIBSLZ_BUILD)/.configured: $(LIBSLZ_BUILD)/.origin
+	$(call verbose_cmd,CONFIG,libslz: $(notdir $@), \
+	cd $(LIBSLZ_EXTRACTED) && ./configure && touch $@)
+
+UK_PREPARE += $(LIBSLZ_BUILD)/.configured
