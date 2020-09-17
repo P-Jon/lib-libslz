@@ -1,7 +1,4 @@
-config LIBSLZ
-	   bool "slz - stateless ZIP library"
-	   default y
-	   depends on HAVE_LIBC
-	   select LIBVFSCORE
-	   select LIBRAMFS
-	   select LIBDEVFS
+menuconfig LIBSLZ
+	bool "slz - stateless ZIP library"
+	default y
+	   

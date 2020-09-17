@@ -38,24 +38,21 @@ $(eval $(call addlib_s,libzlib,$(CONFIG_LIBSLZ)))
 ################################################################################
 # Original sources
 ################################################################################
-#### LIBSLZ_VERSION=1.2.0
-LIBSLZ_VERSION=ff537154e7f5f2fffdbef1cd8c52b564c1b00067
-LIBSLZ_URL=http://git.1wt.eu/web?p=libslz.git;a=snapshot;h=$(LIBSLZ_VERSION);sf=tgz
-LIBSLZ_DOWNLOADDIR=libslz-
-LIBSLZ_DIR=libslz
+LIBSLZ_VERSION=1.2.0
+LIBSLZ_URL=https://delta.lancs.ac.uk/mirrors/libslz/-/archive/v1.2.0/libslz-v$(LIBSLZ_VERSION).tar.gz
 
-$(eval $(call fetchas,libslz,$(LIBSLZ_URL),$(LIBSLZ_VERSION).tar.gz))
+$(eval $(call fetch,libslz,$(LIBSLZ_URL)))
 
 ################################################################################
 # Helpers
 ################################################################################
-LIBSLZ_EXTRACTED=$(LISLZ_ORIGIN)/$(LIBZLIB_DIR)
+LIBZLIB_SUBDIR=libslz-v$(LIBSLZ_VERSION)
+LIBSLZ_SRC=$(LISLZ_ORIGIN)/$(LIBZLIB_SUBDIR)/src
 
 ################################################################################
 # Library includes
 ################################################################################
-CINCLUDES-$(CONFIG_LIBSLZ)   += -I$(LIBSLZ_EXTRACTED)
-CXXINCLUDES-$(CONFIG_LIBSLZ) += -I$(LIBSLZ_EXTRACTED)
+CINCLUDES-$(CONFIG_LIBSLZ)   += -I$(LIBSLZ_SRC)
 
 ################################################################################
 # Global flags
@@ -64,9 +61,9 @@ OPTIONS_CFLAGS  += $(if $(SLZ_INC),-I$(SLZ_INC))
 OPTIONS_LDFLAGS += $(if $(SLZ_LIB),-L$(SLZ_LIB)) -lslz
 
 LIBSLZ_FLAGS += -fomit-frame-pointer \
-                        -fPIC -DPRECOMPUTE_TABLES \ 
-                        -Wall \
-                        -g
+                        -fPIC -DPRECOMPUTE_TABLES 
+                        #\ -Wno-implicit-fallthrough
+                        #\ -Wno-
 
 LIBSLZ_CFLAGS-y += $(LIBSLZ_FLAGS)
 LIBZLIB_CXXFLAGS-y += $(LIBSLZ_FLAGS)
@@ -74,18 +71,6 @@ LIBZLIB_CXXFLAGS-y += $(LIBSLZ_FLAGS)
 ################################################################################
 # libslz code
 ################################################################################
-LIBSLZ_SRCS-y += $(LIBSLZ_EXTRACTED)/src/slz.c
-LIBSLZ_SRCS-y += $(LIBSLZ_EXTRACTED)/src/slz.h
-LIBSLZ_SRCS-y += $(LIBSLZ_EXTRACTED)/src/tables.h
-LIBSLZ_SRCS-y += $(LIBSLZ_EXTRACTED)/src/zdec.c
-LIBSLZ_SRCS-y += $(LIBSLZ_EXTRACTED)/src/zenc.c
+LIBSLZ_SRCS-y += $(LIBSLZ_SRC)/slz.c
 
-################################################################################
-# libslz prepare
-################################################################################
-# Run ./configure
-$(LIBSLZ_BUILD)/.configured: $(LIBSLZ_BUILD)/.origin
-	$(call verbose_cmd,CONFIG,libslz: $(notdir $@), \
-	cd $(LIBSLZ_EXTRACTED) && ./configure && touch $@)
 
-UK_PREPARE += $(LIBSLZ_BUILD)/.configured
