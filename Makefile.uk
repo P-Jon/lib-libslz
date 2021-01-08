@@ -1,4 +1,4 @@
-#  libzlib Makefile.uk
+#  libslz Makefile.uk
 #
 #  Authors: Jonathon Cross <jon@jonathoncross.co.uk
 #
@@ -33,7 +33,7 @@
 ################################################################################
 # Library registration
 ################################################################################
-$(eval $(call addlib_s,libzlib,$(CONFIG_LIBSLZ)))
+$(eval $(call addlib_s,libslz,$(CONFIG_LIBSLZ)))
 
 ################################################################################
 # Original sources
@@ -46,8 +46,8 @@ $(eval $(call fetch,libslz,$(LIBSLZ_URL)))
 ################################################################################
 # Helpers
 ################################################################################
-LIBZLIB_SUBDIR=libslz-v$(LIBSLZ_VERSION)
-LIBSLZ_SRC=$(LISLZ_ORIGIN)/$(LIBZLIB_SUBDIR)/src
+LIBSLZ_SUBDIR=libslz-v$(LIBSLZ_VERSION)
+LIBSLZ_SRC=$(LIBSLZ_ORIGIN)/$(LIBSLZ_SUBDIR)/src
 
 ################################################################################
 # Library includes
@@ -66,7 +66,7 @@ LIBSLZ_FLAGS += -fomit-frame-pointer \
                         #\ -Wno-
 
 LIBSLZ_CFLAGS-y += $(LIBSLZ_FLAGS)
-LIBZLIB_CXXFLAGS-y += $(LIBSLZ_FLAGS)
+LIBSLZ_CXXFLAGS-y += $(LIBSLZ_FLAGS)
 
 ################################################################################
 # libslz code
